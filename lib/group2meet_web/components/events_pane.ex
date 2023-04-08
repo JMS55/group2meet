@@ -1,10 +1,10 @@
 alias ElixirSense.Providers.Suggestion.Reducers.Common
-import CommonComponents
+import Pane
 
 defmodule EventsPane do
   use Phoenix.Component
 
-  def events(assigns) do
+  def events_pane(assigns) do
     ~H"""
     <.pane>Events</.pane>
     """
