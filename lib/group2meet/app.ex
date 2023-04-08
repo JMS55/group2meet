@@ -15,7 +15,7 @@ defmodule Group2meet.App do
   def get_deadlines(group_id) do
     group = Group
     |> Repo.get(group_id)
-    |> Repo.preload(deadlines: :user)
+    |> Repo.preload(:deadlines)
 
     group.deadlines
   end
@@ -57,7 +57,7 @@ defmodule Group2meet.App do
   def get_meetings(group_id) do
     group = Group
     |> Repo.get(group_id)
-    |> Repo.preload(meetings: :user)
+    |> Repo.preload(:meetings)
 
     group.meetings
   end
@@ -93,7 +93,7 @@ defmodule Group2meet.App do
   def get_planners(group_id) do
     group = Group
     |> Repo.get(group_id)
-    |> Repo.preload(planners: :user)
+    |> Repo.preload(:planners)
 
     group.planners
   end
