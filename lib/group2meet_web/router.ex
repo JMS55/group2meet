@@ -18,6 +18,7 @@ defmodule Group2meetWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live ":group_id", GroupLive
   end
 
   # Other scopes may use custom stacks.
