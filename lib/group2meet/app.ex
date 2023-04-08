@@ -34,6 +34,17 @@ defmodule Group2meet.App do
     user.groups
   end
 
+  def add_user_to_group(user_id, group_id) do
+    group = Repo.get(Group, group_id)
+    user = Repo.get(User, user_id)
+
+    %GroupUser{}
+    |> GroupUser.changeset(%{})
+    |> Changeset.put_assoc(:group, group)
+    |> Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
   def create_meeting(params, group_id) do
     group = Repo.get(Group, group_id)
 
@@ -101,14 +112,25 @@ defmodule Group2meet.App do
     group.users
   end
 
-  def add_user_to_group(user_id, group_id) do
-    group = Repo.get(Group, group_id)
+  def update_planner_response(params, user_id, planner_id) do
     user = Repo.get(User, user_id)
+    planner = Repo.get(Planner, planner_id)
 
-    %GroupUser{}
-    |> GroupUser.changeset(%{})
-    |> Changeset.put_assoc(:group, group)
+    %PlannerResponse{}
+    |> PlannerResponse.changeset(params)
     |> Changeset.put_assoc(:user, user)
-    |> Repo.insert()
+    |> Changeset.put_assoc(:planner, planner)
+    |> Repo.insert(
+      conflict_target: [:user_id, :planner_id],
+      on_conflict: {:replace, [:available_cells]}
+    )
+  end
+
+  def get_planner_responses(planner_id) do
+    planner = Planner
+    |> Repo.get(planner_id)
+    |> Repo.preload(:planner_responses)
+
+    planner.planner_responses
   end
 end

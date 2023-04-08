@@ -15,5 +15,6 @@ defmodule Group2meet.PlannerResponse do
     planner_response
     |> cast(attrs, [:available_cells])
     |> validate_required([:available_cells])
+    |> unique_constraint(:planner_responses_unique_constraint, name: :planner_responses_unique_index)
   end
 end
