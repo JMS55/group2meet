@@ -16,14 +16,14 @@ defmodule ChatPane do
     if connected?(socket), do: Group2meetWeb.Endpoint.subscribe(group_id)
 
     socket = assign(socket, group_id: group_id)
-    socket = stream(socket, :messages, Group2meet.App.list_messages(group_id))
+    socket = stream(socket, :messages, Group2meet.App.get_messages(group_id))
     socket = assign(socket, form: %Group2meet.Message{} |> Ecto.Changeset.change() |> to_form())
 
     {:ok, socket}
   end
 
   def handle_event("send_message", %{"message" => params}, socket) do
-    {:ok, message} = Group2meet.App.post_message(params, socket.assigns.group_id, 1)
+    {:ok, message} = Group2meet.App.create_message(params, socket.assigns.group_id, 1)
     Group2meetWeb.Endpoint.broadcast(socket.assigns.group_id, "new_message", message)
 
     socket = assign(socket, form: %Group2meet.Message{} |> Ecto.Changeset.change() |> to_form())
