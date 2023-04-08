@@ -1,5 +1,4 @@
 import EventsPane
-import ChatPane
 
 defmodule Group2meetWeb.GroupLive do
   use Phoenix.LiveView, container: {:tr, class: "contents"}
@@ -7,8 +6,8 @@ defmodule Group2meetWeb.GroupLive do
   def render(assigns) do
     ~H"""
     <div class="grid grid-cols-2 gap-4 h-full p-4">
-      <.events_pane />
-      <.chat_pane />
+      <.events_pane group_id={@group_id} />
+      <.live_component module={ChatPane} id="chat_pane" group_id={@group_id} />
     </div>
     """
   end
