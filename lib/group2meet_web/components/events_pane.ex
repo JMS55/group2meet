@@ -100,7 +100,7 @@ defmodule EventsPane do
       <div class="flex justify-between items-center font-mono">
         <div class="flex gap-2 items-center">
           <.icon name="hero-exclamation-circle" class="w-6 h-6" />
-          <p class="text-lg font-bold"><%= deadline.title %></p>
+          <p class="text-xl font-bold"><%= deadline.title %></p>
         </div>
         <div class="flex flex-col items-end gap-2 font-mono">
           <p class="text-lg">
