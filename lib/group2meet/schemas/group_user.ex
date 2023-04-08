@@ -1,6 +1,6 @@
 defmodule Group2meet.GroupUser do
   use Ecto.Schema
-  # import Ecto.Changeset
+  import Ecto.Changeset
 
   schema "group_users" do
     belongs_to :group, Group2meet.Group
@@ -9,8 +9,9 @@ defmodule Group2meet.GroupUser do
     timestamps()
   end
 
-  # @doc false
-  # def changeset(group_user, attrs) do
-  #   group_user
-  # end
+  @doc false
+  def changeset(group_user, attrs) do
+    group_user
+    |> cast(attrs, [])
+  end
 end

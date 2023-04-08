@@ -4,8 +4,6 @@ defmodule Group2meet.Message do
 
   schema "messages" do
     field :contents, :string
-    field :sequence_number, :integer
-    field :timestamp, :utc_datetime
     belongs_to :group, Group2meet.Group
     belongs_to :user, Group2meet.User
 
@@ -15,7 +13,7 @@ defmodule Group2meet.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:sequence_number, :contents, :timestamp])
-    |> validate_required([:sequence_number, :contents, :timestamp])
+    |> cast(attrs, [:contents])
+    |> validate_required([:contents])
   end
 end

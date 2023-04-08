@@ -1,4 +1,4 @@
-defmodule Group2meet.PlannerResponses do
+defmodule Group2meet.PlannerResponse do
   use Ecto.Schema
   import Ecto.Changeset
 

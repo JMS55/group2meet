@@ -25,9 +25,7 @@ defmodule Group2meet.Repo.Migrations.Initial do
     create table(:messages) do
       add :group_id, references(:groups)
       add :user_id, references(:users)
-      add :sequence_number, :integer
       add :contents, :string
-      add :timestamp, :utc_datetime
 
       timestamps()
     end
