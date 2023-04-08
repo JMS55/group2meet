@@ -2,7 +2,6 @@ defmodule Group2meet.App do
   alias Group2meet.{Deadline, Group, GroupUser, Meeting, Message, PlannerResponse, Planner, User}
   alias Group2meet.Repo
   alias Ecto.Changeset
-  import Ecto.Query
 
   def create_user(params) do
     %User{}
@@ -28,12 +27,11 @@ defmodule Group2meet.App do
   end
 
   def list_messages(group_id) do
-    Repo.all(
-      from(m in Message,
-        where: m.group_id == ^group_id,
-        order_by: [desc: m.inserted_at]
-      )
-    )
+    group = Group
+    |> Repo.get(group_id)
+    |> Repo.preload(messages: :user)
+
+    group.messages
   end
 
   def post_message(params, group_id, user_id) do
