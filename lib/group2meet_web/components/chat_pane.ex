@@ -44,12 +44,7 @@ defmodule ChatPane do
       phx-update="stream"
       phx-hook="KeepScrolledToBottom"
     >
-      <.message
-        :for={{dom_id, message} <- @messages}
-        id={dom_id}
-        username={message.user.name}
-        contents={message.contents}
-      />
+      <.message :for={{dom_id, message} <- @messages} id={dom_id} message={message} />
     </div>
     """
   end
@@ -57,8 +52,8 @@ defmodule ChatPane do
   defp message(assigns) do
     ~H"""
     <div class="snap-center">
-      <p class="text-md tracking-tight font-semibold"><%= @username %></p>
-      <p class="break-words"><%= @contents %></p>
+      <p class="text-md tracking-tight font-semibold"><%= @message.user.name %></p>
+      <p class="break-words"><%= @message.contents %></p>
     </div>
     """
   end
