@@ -8,8 +8,8 @@ defmodule EventsPane do
     ~H"""
     <div class="p-4 rounded-lg bg-white shadow-lg flex flex-col gap-4 overflow-y-auto">
       <.in_progress_event in_progress_event={@in_progress_event} />
-      <.new_event />
       <.planners />
+      <.new_event />
       <.events deadlines={@deadlines} />
     </div>
     """
@@ -41,7 +41,7 @@ defmodule EventsPane do
     {:ok, datetime} = NaiveDateTime.from_iso8601(params["datetime"] <> ":00")
     {:ok, datetime} = DateTime.from_naive(datetime, "America/New_York")
 
-    {:ok, deadline} =
+    {:ok, _deadline} =
       Group2meet.App.create_deadline(
         %{
           "datetime" => datetime,
