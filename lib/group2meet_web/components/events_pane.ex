@@ -1,4 +1,4 @@
-alias ElixirSense.Providers.Suggestion.Reducers.Common
+import Group2meetWeb.CoreComponents
 import Pane
 
 defmodule EventsPane do
