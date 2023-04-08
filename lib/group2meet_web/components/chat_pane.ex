@@ -58,7 +58,7 @@ defmodule ChatPane do
     ~H"""
     <div class="snap-center">
       <p class="text-md tracking-tight font-semibold"><%= @username %></p>
-      <p><%= @contents %></p>
+      <p class="break-words"><%= @contents %></p>
     </div>
     """
   end
