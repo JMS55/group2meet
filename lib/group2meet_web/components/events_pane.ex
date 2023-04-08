@@ -1,9 +1,7 @@
-import Group2meetWeb.CoreComponents
-
 defmodule EventsPane do
-  use Phoenix.Component
+  use Phoenix.LiveComponent
 
-  def events_pane(assigns) do
+  def render(assigns) do
     ~H"""
     <div class="p-4 rounded-lg bg-white shadow-lg flex flex-col overflow-y-auto">
       <.new_event />
@@ -15,24 +13,9 @@ defmodule EventsPane do
 
   defp new_event(assigns) do
     ~H"""
-    <.new_event_choice />
-    """
-  end
-
-  defp new_event_start(assigns) do
-    ~H"""
-    <.event extra_classes="flex justify-center items-center gap-2">
-      <p class="text-xl tracking-tight font-semibold">New Event</p>
-      <.icon name="hero-plus" class="w-6 h-6" />
-    </.event>
-    """
-  end
-
-  defp new_event_choice(assigns) do
-    ~H"""
     <.event extra_classes="flex justify-around">
-      <p class="text-xl tracking-tight font-semibold">Deadline</p>
-      <p class="text-xl tracking-tight font-semibold">Meeting</p>
+      <button phx-click="new_deadline" class="text-xl tracking-tight font-semibold">Deadline</button>
+      <button phx-click="new_meeting" class="text-xl tracking-tight font-semibold">Meeting</button>
     </.event>
     """
   end

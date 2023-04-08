@@ -27,6 +27,7 @@ defmodule ChatPane do
     Group2meetWeb.Endpoint.broadcast(socket.assigns.group_id, "new_message", message)
 
     socket = assign(socket, form: %Group2meet.Message{} |> Ecto.Changeset.change() |> to_form())
+    socket = push_event(socket, "clear", %{})
     {:noreply, socket}
   end
 
@@ -37,7 +38,12 @@ defmodule ChatPane do
 
   defp message_history(assigns) do
     ~H"""
-    <div class="flex flex-col gap-6 overflow-y-auto snap-y" id="messages" phx-update="stream">
+    <div
+      class="flex flex-col gap-6 overflow-y-auto snap-y"
+      id="messages"
+      phx-update="stream"
+      phx-hook="KeepScrolledToBottom"
+    >
       <.message
         :for={{dom_id, message} <- @messages}
         id={dom_id}
@@ -60,7 +66,7 @@ defmodule ChatPane do
   defp chat_box(assigns) do
     ~H"""
     <.form for={@form} phx-submit="send_message">
-      <.input field={@form[:contents]} />
+      <.input field={@form[:contents]} phx-hook="Clear" />
     </.form>
     """
   end
