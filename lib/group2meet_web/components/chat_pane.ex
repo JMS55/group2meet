@@ -5,7 +5,7 @@ defmodule ChatPane do
 
   def render(assigns) do
     ~H"""
-    <div class="p-4 rounded-lg bg-white shadow-lg flex flex-col overflow-y-auto">
+    <div class="p-4 rounded-lg bg-white shadow-lg flex flex-col justify-end overflow-y-auto">
       <.message_history messages={@streams.messages} />
       <.chat_box form={@form} />
     </div>
