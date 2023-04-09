@@ -3,8 +3,8 @@ defmodule Group2meet.Deadline do
   import Ecto.Changeset
 
   schema "deadlines" do
-    field :datetime, :utc_datetime
     field :title, :string
+    field :datetime, :utc_datetime
     belongs_to :group, Group2meet.Group
 
     timestamps()

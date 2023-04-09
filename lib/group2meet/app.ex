@@ -69,7 +69,7 @@ defmodule Group2meet.App do
     )
     |> Enum.sort_by(fn
       {:deadline, deadline} -> deadline.datetime
-      {:meeting, meeting} -> meeting.start_datetime
+      {:meeting, meeting} -> DateTime.new!(meeting.date, meeting.time)
     end)
   end
 

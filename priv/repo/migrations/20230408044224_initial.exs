@@ -41,8 +41,9 @@ defmodule Group2meet.Repo.Migrations.Initial do
     create table(:meetings) do
       add :group_id, references(:groups)
       add :title, :string
-      add :start_datetime, :utc_datetime
-      add :end_datetime, :utc_datetime
+      add :date, :date
+      add :start_time, :time
+      add :end_time, :time
 
       timestamps()
     end
