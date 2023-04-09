@@ -11,6 +11,8 @@ defmodule Group2meetWeb.GroupLive do
   end
 
   def mount(%{"group_id" => group_id}, %{}, socket) do
+    group = Group2meet.App.get_group(group_id)
+    socket = assign(socket, page_title: group.name)
     socket = assign(socket, :group_id, group_id)
     {:ok, socket}
   end

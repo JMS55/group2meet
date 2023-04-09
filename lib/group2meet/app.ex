@@ -25,6 +25,10 @@ defmodule Group2meet.App do
     |> Group.changeset(params)
     |> Repo.insert()
   end
+  
+  def get_group(group_id) do
+    Group |> Repo.get(group_id)
+  end
 
   def get_groups(user_id) do
     user = User
