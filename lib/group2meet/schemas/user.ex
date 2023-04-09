@@ -18,5 +18,6 @@ defmodule Group2meet.User do
     user
     |> cast(attrs, [:auth_id, :name])
     |> validate_required([:auth_id, :name])
+    |> unique_constraint(:auth_id)
   end
 end

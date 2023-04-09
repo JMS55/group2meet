@@ -8,7 +8,8 @@ defmodule Group2meetWeb.Endpoint do
     store: :cookie,
     key: "_group2meet_key",
     signing_salt: "4k0UXKUl",
-    same_site: "Lax"
+    same_site: "Lax",
+    max_age: 30
   ]
 
   socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]

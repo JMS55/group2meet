@@ -25,7 +25,7 @@ defmodule Group2meet.App do
     |> Group.changeset(params)
     |> Repo.insert()
   end
-  
+
   def get_group(group_id) do
     Group |> Repo.get(group_id)
   end
@@ -116,7 +116,12 @@ defmodule Group2meet.App do
   def create_user(params) do
     %User{}
     |> User.changeset(params)
-    |> Repo.insert()
+    |> Repo.insert(
+      conflict_target: :auth_id,
+      on_conflict: :nothing
+    )
+
+    Repo.get_by(User, auth_id: params.auth_id)
   end
 
   def get_users(group_id) do

@@ -12,9 +12,12 @@ defmodule ChatPane do
     """
   end
 
-  def mount(_params, %{"group_id" => group_id}, socket) do
+  def mount(_params, session, socket) do
+    group_id = session["group_id"]
+
     if connected?(socket), do: Group2meetWeb.Endpoint.subscribe(group_id)
 
+    socket = assign(socket, user_id: session["user_id"])
     socket = assign(socket, group_id: group_id)
     socket = stream(socket, :messages, Group2meet.App.get_messages(group_id))
     socket = assign(socket, form: %Group2meet.Message{} |> Ecto.Changeset.change() |> to_form())
@@ -23,7 +26,7 @@ defmodule ChatPane do
   end
 
   def handle_event("send_message", %{"message" => params}, socket) do
-    {:ok, message} = Group2meet.App.create_message(params, socket.assigns.group_id, 1)
+    {:ok, message} = Group2meet.App.create_message(params, socket.assigns.group_id, socket.assigns.user_id)
     Group2meetWeb.Endpoint.broadcast(socket.assigns.group_id, "new_message", message)
 
     socket = assign(socket, form: %Group2meet.Message{} |> Ecto.Changeset.change() |> to_form())

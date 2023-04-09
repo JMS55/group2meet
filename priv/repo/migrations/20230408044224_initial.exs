@@ -67,6 +67,7 @@ defmodule Group2meet.Repo.Migrations.Initial do
       timestamps()
     end
 
+    create unique_index(:users, [:auth_id])
     create unique_index(:planner_responses, [:user_id, :planner_id], name: :planner_responses_unique_index)
   end
 end

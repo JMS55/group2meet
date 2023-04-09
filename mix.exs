@@ -50,7 +50,8 @@ defmodule Group2meet.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:tzdata, "~> 1.1"}
+      {:tzdata, "~> 1.1"},
+      {:elixir_auth_google, "~> 1.6.5"}
     ]
   end
 

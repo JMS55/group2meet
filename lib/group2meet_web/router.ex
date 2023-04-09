@@ -17,8 +17,9 @@ defmodule Group2meetWeb.Router do
   scope "/", Group2meetWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
-    live ":group_id", GroupLive
+    get "/", WelcomeController, :welcome
+    get "/auth/google/callback", GoogleAuthController, :index
+    live "/:group_id", GroupLive
   end
 
   # Other scopes may use custom stacks.
