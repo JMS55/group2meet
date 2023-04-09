@@ -105,12 +105,66 @@ defmodule Group2meet.App do
     |> Repo.insert()
   end
 
-  def get_planners(group_id) do
+  def get_planners(group_id, user_id) do
     group = Group
     |> Repo.get(group_id)
     |> Repo.preload(:planners)
 
+    Enum.each(group.planners, fn planner -> create_planner_response(%{available_cells: []}, user_id, planner.id) end)
+
+    group = Group
+    |> Repo.get(group_id)
+    |> Repo.preload(planners: :planner_responses)
+
     group.planners
+  end
+
+  def create_planner_response(params, user_id, planner_id) do
+    user = Repo.get(User, user_id)
+    planner = Repo.get(Planner, planner_id)
+
+    %PlannerResponse{}
+    |> PlannerResponse.changeset(params)
+    |> Changeset.put_assoc(:user, user)
+    |> Changeset.put_assoc(:planner, planner)
+    |> Repo.insert(
+      conflict_target: [:user_id, :planner_id],
+      on_conflict: :nothing
+    )
+  end
+
+  def update_planner_response(params, user_id, planner_id) do
+    user = Repo.get(User, user_id)
+    planner = Repo.get(Planner, planner_id)
+
+    %PlannerResponse{}
+    |> PlannerResponse.changeset(params)
+    |> Changeset.put_assoc(:user, user)
+    |> Changeset.put_assoc(:planner, planner)
+    |> Repo.insert(
+      conflict_target: [:user_id, :planner_id],
+      on_conflict: {:replace, [:available_cells]}
+    )
+  end
+
+  def toggle_planner_response_cell(index, user_id, planner_id) do
+    available_cells = Repo.get_by(PlannerResponse, [user_id: user_id, planner_id: planner_id]).available_cells
+    new_available_cells = (
+      if Enum.any?(available_cells, &(&1 == index)) do
+        Enum.filter(available_cells, &(&1 != index))
+      else
+        [index | available_cells]
+      end
+    )
+    update_planner_response(%{available_cells: new_available_cells}, user_id, planner_id)
+  end
+
+  def get_planner_responses(planner_id) do
+    planner = Planner
+    |> Repo.get(planner_id)
+    |> Repo.preload(:planner_responses)
+
+    planner.planner_responses
   end
 
   def create_user(params) do
@@ -130,27 +184,5 @@ defmodule Group2meet.App do
     |> Repo.preload(:users)
 
     group.users
-  end
-
-  def update_planner_response(params, user_id, planner_id) do
-    user = Repo.get(User, user_id)
-    planner = Repo.get(Planner, planner_id)
-
-    %PlannerResponse{}
-    |> PlannerResponse.changeset(params)
-    |> Changeset.put_assoc(:user, user)
-    |> Changeset.put_assoc(:planner, planner)
-    |> Repo.insert(
-      conflict_target: [:user_id, :planner_id],
-      on_conflict: {:replace, [:available_cells]}
-    )
-  end
-
-  def get_planner_responses(planner_id) do
-    planner = Planner
-    |> Repo.get(planner_id)
-    |> Repo.preload(:planner_responses)
-
-    planner.planner_responses
   end
 end

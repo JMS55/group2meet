@@ -8,17 +8,22 @@ defmodule EventsPane do
     ~H"""
     <div class="p-4 rounded-lg bg-white shadow-lg flex flex-col gap-4 overflow-y-auto">
       <.in_progress_event :if={@in_progress_event != nil} in_progress_event={@in_progress_event} />
-      <.planners />
+      <.planner :for={planner <- @planners} planner={planner} user_id={@user_id} />
       <.new_event />
       <.events events={@events} />
     </div>
     """
   end
 
-  def mount(_params, %{"group_id" => group_id}, socket) do
+  def mount(_params, session, socket) do
+    group_id = session["group_id"]
+    user_id = session["user_id"]
+
+    socket = assign(socket, user_id: user_id)
     socket = assign(socket, group_id: group_id)
     socket = assign(socket, in_progress_event: nil)
     socket = assign(socket, events: Group2meet.App.get_events(group_id))
+    socket = assign(socket, planners: Group2meet.App.get_planners(group_id, user_id))
 
     {:ok, socket}
   end
@@ -80,6 +85,12 @@ defmodule EventsPane do
     {:noreply, socket}
   end
 
+  def handle_event("toggle_cell", %{"planner_id" => planner_id, "index" => index}, socket) do
+    Group2meet.App.toggle_planner_response_cell(index, socket.assigns.user_id, planner_id)
+    socket = assign(socket, planners: Group2meet.App.get_planners(socket.assigns.group_id, socket.assigns.user_id))
+    {:noreply, socket}
+  end
+
   defp in_progress_event(%{:in_progress_event => {:deadline, form}} = assigns) do
     assigns = assign(assigns, form: form)
 
@@ -133,9 +144,32 @@ defmodule EventsPane do
     """
   end
 
-  defp planners(assigns) do
-    ~H"""
+  defp planner(assigns) do
+    planner = assigns.planner
+    num_rows = Time.diff(planner.end_time, planner.start_time, :hour) * 4
+    num_cols = Date.diff(planner.end_date, planner.start_date) + 1
+    user_response = Enum.find(planner.planner_responses, &(&1.user_id == assigns.user_id))
+    assigns = assign(assigns, num_rows: num_rows)
+    assigns = assign(assigns, rows: Enum.to_list(0..(num_rows - 1)))
+    assigns = assign(assigns, cols: Enum.to_list(0..(num_cols - 1)))
 
+    cell_color = fn (i, j) -> if Enum.any?(user_response.available_cells, &(&1 == i + j * num_rows)), do: "bg-green-500", else: "bg-red-500" end
+    assigns = assign(assigns, cell_color: cell_color)
+
+    ~H"""
+    <.event>
+      <table>
+        <tbody>
+          <%= for i <- @rows do %>
+            <tr>
+              <%= for j <- @cols do %>
+                <td phx-click="toggle_cell" phx-value-planner_id={@planner.id} phx-value-index={i + j * @num_rows} class={"w-12 h-3 border-[1px] border-slate-800 #{@cell_color.(i, j)}"} />
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </.event>
     """
   end
 
