@@ -5,8 +5,8 @@ defmodule Group2meet.Meeting do
   schema "meetings" do
     field :title, :string
     field :date, :date
-    field :end_time, :utc_datetime
-    field :start_time, :utc_datetime
+    field :end_time, :time
+    field :start_time, :time
     belongs_to :group, Group2meet.Group
 
     timestamps()
