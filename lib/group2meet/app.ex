@@ -62,6 +62,17 @@ defmodule Group2meet.App do
     group.meetings
   end
 
+  def get_events(group_id) do
+    Enum.concat(
+      Enum.map(get_deadlines(group_id), &{:deadline, &1}),
+      Enum.map(get_meetings(group_id), &{:meeting, &1})
+    )
+    |> Enum.sort_by(fn
+      {:deadline, deadline} -> deadline.datetime
+      {:meeting, meeting} -> meeting.start_datetime
+    end)
+  end
+
   def create_message(params, group_id, user_id) do
     group = Repo.get(Group, group_id)
     user = Repo.get(User, user_id)
