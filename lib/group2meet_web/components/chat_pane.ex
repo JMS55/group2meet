@@ -5,7 +5,7 @@ defmodule ChatPane do
 
   def render(assigns) do
     ~H"""
-    <div class="p-4 rounded-lg bg-white shadow-lg flex flex-col justify-end overflow-y-auto">
+    <div class="p-4 rounded-lg bg-white shadow-lg flex flex-col justify-end overflow-y-auto text-lg">
       <.message_history messages={@streams.messages} />
       <.chat_box form={@form} />
     </div>
@@ -52,8 +52,8 @@ defmodule ChatPane do
   defp message(assigns) do
     ~H"""
     <div class="snap-center">
-      <p class="text-md tracking-tight font-semibold"><%= @message.user.name %></p>
-      <p class="break-words"><%= @message.contents %></p>
+      <p class="tracking-tight font-semibold"><%= @message.user.name %></p>
+      <p class="text-md break-words"><%= @message.contents %></p>
     </div>
     """
   end
