@@ -52,7 +52,10 @@ defmodule ChatPane do
   defp message(assigns) do
     ~H"""
     <div class="snap-center">
-      <p class="tracking-tight font-semibold"><%= @message.user.name %></p>
+      <div class="flex gap-2 items-center">
+        <p class="tracking-tight font-semibold"><%= @message.user.name %></p>
+        <p class="font-mono text-xs text-zinc-600"><%= Calendar.strftime(@message.inserted_at, "%-I:%M %p") %></p>
+      </div>
       <p class="text-md break-words"><%= @message.contents %></p>
     </div>
     """
